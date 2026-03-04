@@ -5,6 +5,8 @@ Este diretório contém a documentação detalhada do estado atual do projeto.
 ## Índice
 
 - [Guia Completo do Projeto](./GUIA-COMPLETO.md)
+- [Plano de Estudo](./plano-de-estudo.md)
+- [Plano de Implementacao](./plano-implementacao.md)
 
 ## Leitura recomendada
 
