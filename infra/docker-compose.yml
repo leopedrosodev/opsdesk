@@ -1,0 +1,31 @@
+version: '3.9'
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: opsdesk-postgres
+    environment:
+      POSTGRES_DB: opsdesk
+      POSTGRES_USER: opsdesk
+      POSTGRES_PASSWORD: opsdesk
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ../backend
+    container_name: opsdesk-backend
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/opsdesk
+      SPRING_DATASOURCE_USERNAME: opsdesk
+      SPRING_DATASOURCE_PASSWORD: opsdesk
+      JWT_SECRET: change-me-change-me-change-me-change-me-1234567890
+      JWT_EXPIRATION_MINUTES: 120
+    ports:
+      - "8080:8080"
+
+volumes:
+  postgres_data:

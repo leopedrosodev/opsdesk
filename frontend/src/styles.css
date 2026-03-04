@@ -1,0 +1,110 @@
+:root {
+  --bg: #f4f6f8;
+  --surface: #ffffff;
+  --text: #101828;
+  --muted: #475467;
+  --primary: #005cc8;
+  --accent: #00a08b;
+  --danger: #b42318;
+  --border: #d0d5dd;
+  --shadow: 0 10px 25px rgba(16, 24, 40, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Space Grotesk', sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 10% 20%, rgba(0, 92, 200, 0.12), transparent 25%),
+    radial-gradient(circle at 90% 10%, rgba(0, 160, 139, 0.12), transparent 28%),
+    var(--bg);
+  min-height: 100vh;
+}
+
+.container {
+  width: min(1100px, 92%);
+  margin: 0 auto;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 1rem;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.65rem 0.75rem;
+}
+
+button {
+  border: 0;
+  border-radius: 10px;
+  padding: 0.65rem 0.9rem;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn-secondary {
+  background: #e4e7ec;
+  color: #111;
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: 0.65rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.badge {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 0.2rem 0.65rem;
+  font-size: 0.8rem;
+  font-family: 'IBM Plex Mono', monospace;
+  background: #eef4ff;
+  color: #1849a9;
+}
+
+.error {
+  color: var(--danger);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .table {
+    font-size: 0.85rem;
+  }
+}
