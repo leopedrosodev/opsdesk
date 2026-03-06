@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 220" role="img" aria-labelledby="title desc">
+  <title id="title">OpsDesk Logo Claro</title>
+  <desc id="desc">Logo completo do OpsDesk para fundo escuro.</desc>
+  <rect x="16" y="42" width="164" height="164" rx="10" fill="#1f4eff" />
+  <text
+    x="98"
+    y="164"
+    text-anchor="middle"
+    font-size="126"
+    font-family="Space Grotesk, Arial Black, sans-serif"
+    font-weight="700"
+    fill="#f3f4f6"
+  >
+    O
+  </text>
+  <text
+    x="142"
+    y="184"
+    font-size="122"
+    font-family="Space Grotesk, Arial Black, sans-serif"
+    font-weight="700"
+    fill="#f3f4f6"
+    stroke="#302046"
+    stroke-width="8"
+    paint-order="stroke"
+  >
+    psDesk
+  </text>
+</svg>

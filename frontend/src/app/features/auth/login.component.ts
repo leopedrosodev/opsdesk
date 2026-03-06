@@ -71,7 +71,7 @@ export class LoginComponent {
     this.error = '';
 
     this.authService.login(this.form.getRawValue()).subscribe({
-      next: () => this.router.navigateByUrl('/'),
+      next: () => this.router.navigateByUrl('/dashboard'),
       error: (err) => {
         this.error = err?.error?.message ?? 'Falha ao autenticar';
         this.loading = false;

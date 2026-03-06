@@ -50,7 +50,7 @@ import { RunbooksService } from '../../core/services/runbooks.service';
       pre {
         margin: 0;
         padding: 0.8rem;
-        background: #f8fafc;
+        background: var(--surface-soft);
         border-radius: 10px;
         border: 1px solid var(--border);
         white-space: pre-wrap;

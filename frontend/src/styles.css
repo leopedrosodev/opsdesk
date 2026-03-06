@@ -1,6 +1,8 @@
 :root {
   --bg: #f4f6f8;
   --surface: #ffffff;
+  --surface-soft: #f8fafc;
+  --surface-hover: #eef2f6;
   --text: #101828;
   --muted: #475467;
   --primary: #005cc8;
@@ -8,10 +10,45 @@
   --danger: #b42318;
   --border: #d0d5dd;
   --shadow: 0 10px 25px rgba(16, 24, 40, 0.08);
+  --topbar-bg: rgba(255, 255, 255, 0.88);
+  --blob-primary: rgba(0, 92, 200, 0.12);
+  --blob-accent: rgba(0, 160, 139, 0.12);
+  --badge-bg: #eef4ff;
+  --badge-text: #1849a9;
+  --guest-cta-bg: #ecfff6;
+  --guest-cta-border: #b7ebd4;
+  --guest-cta-text: #0f5132;
+}
+
+:root[data-theme='dark'] {
+  --bg: #0b111a;
+  --surface: #111a27;
+  --surface-soft: #162233;
+  --surface-hover: #1c2a3d;
+  --text: #e6edf7;
+  --muted: #9cb1c9;
+  --primary: #5aa6ff;
+  --accent: #34d3b0;
+  --danger: #ff7b74;
+  --border: #2d3f56;
+  --shadow: 0 12px 30px rgba(2, 8, 20, 0.45);
+  --topbar-bg: rgba(10, 16, 25, 0.82);
+  --blob-primary: rgba(35, 113, 209, 0.24);
+  --blob-accent: rgba(52, 211, 176, 0.18);
+  --badge-bg: #122b48;
+  --badge-text: #9fd0ff;
+  --guest-cta-bg: #12322a;
+  --guest-cta-border: #2e6f5f;
+  --guest-cta-text: #9df0d8;
 }
 
 * {
   box-sizing: border-box;
+}
+
+html,
+body {
+  transition: background 0.25s ease, color 0.25s ease;
 }
 
 body {
@@ -19,8 +56,8 @@ body {
   font-family: 'Space Grotesk', sans-serif;
   color: var(--text);
   background:
-    radial-gradient(circle at 10% 20%, rgba(0, 92, 200, 0.12), transparent 25%),
-    radial-gradient(circle at 90% 10%, rgba(0, 160, 139, 0.12), transparent 28%),
+    radial-gradient(circle at 10% 20%, var(--blob-primary), transparent 25%),
+    radial-gradient(circle at 90% 10%, var(--blob-accent), transparent 28%),
     var(--bg);
   min-height: 100vh;
 }
@@ -52,6 +89,13 @@ select {
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 0.65rem 0.75rem;
+  background: var(--surface);
+  color: var(--text);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--muted);
 }
 
 button {
@@ -67,8 +111,9 @@ button {
 }
 
 .btn-secondary {
-  background: #e4e7ec;
-  color: #111;
+  background: var(--surface-soft);
+  color: var(--text);
+  border: 1px solid var(--border);
 }
 
 .grid {
@@ -94,8 +139,8 @@ button {
   padding: 0.2rem 0.65rem;
   font-size: 0.8rem;
   font-family: 'IBM Plex Mono', monospace;
-  background: #eef4ff;
-  color: #1849a9;
+  background: var(--badge-bg);
+  color: var(--badge-text);
 }
 
 .error {

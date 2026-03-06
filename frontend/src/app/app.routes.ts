@@ -6,9 +6,11 @@ import { RegisterComponent } from './features/auth/register.component';
 import { TicketsPageComponent } from './features/tickets/tickets-page.component';
 import { AssetsPageComponent } from './features/assets/assets-page.component';
 import { RunbooksPageComponent } from './features/runbooks/runbooks-page.component';
+import { DashboardComponent } from './features/dashboard/dashboard.component';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent, canActivate: [authGuard] },
+  { path: '', component: HomeComponent },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'tickets', component: TicketsPageComponent, canActivate: [authGuard] },

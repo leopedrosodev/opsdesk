@@ -1,31 +1,78 @@
-# OpsDesk - Deploy (Render + Cloudflare + Neon)
+# OpsDesk - Deploy de Produção (Cloudflare + Render + Neon)
 
-## Backend (Render)
+Última atualização: 2026-03-05
 
-1. Criar Web Service apontando para pasta `backend`.
-2. Build command: `mvn -B clean package`.
-3. Start command: `java -jar target/opsdesk-backend-0.0.1-SNAPSHOT.jar`.
-4. Configurar variáveis:
+## 1. Estado atual
+
+- Frontend já publicado no Cloudflare Pages.
+- Backend pronto para deploy no Render.
+- Banco Neon ainda precisa ser conectado ao Render.
+
+## 2. Banco (Neon)
+
+1. Criar projeto e database no Neon.
+2. Copiar credenciais:
+   - host
+   - database
+   - username
+   - password
+3. Montar URL JDBC para Render:
+
+```text
+jdbc:postgresql://HOST/DB?sslmode=require
+```
+
+## 3. Backend (Render)
+
+Você pode usar `infra/render.yaml` (Blueprint) ou configurar manualmente.
+
+### 3.1 Manual (Dashboard)
+
+1. New -> Web Service.
+2. Repo: `opsdesk`.
+3. Root Directory: `backend`.
+4. Runtime: `Docker`.
+5. Variáveis de ambiente:
    - `SPRING_DATASOURCE_URL`
    - `SPRING_DATASOURCE_USERNAME`
    - `SPRING_DATASOURCE_PASSWORD`
    - `JWT_SECRET`
-   - `JWT_EXPIRATION_MINUTES`
+   - `JWT_EXPIRATION_MINUTES=120`
+6. Deploy.
 
-## Frontend (Cloudflare Pages)
+### 3.2 Validação após deploy
 
-1. Criar projeto apontando para pasta `frontend`.
-2. Build command: `npm install && npm run build`.
-3. Build output: `dist/opsdesk`.
-4. Definir variável de ambiente de build para API:
-   - `NG_APP_API_URL` (opcional, se quiser externalizar)
+1. `GET https://SEU_BACKEND.onrender.com/health`
+2. `GET https://SEU_BACKEND.onrender.com/swagger-ui.html`
+3. Testar `POST /auth/register` e `POST /auth/login`.
 
-## Banco (Neon)
+## 4. Frontend (Cloudflare Pages)
 
-1. Criar database PostgreSQL.
-2. Copiar connection string.
-3. Aplicar no Render com SSL habilitado se exigido pelo plano.
+Se o backend ganhar URL nova, atualizar:
 
-## Domínio
+- `frontend/src/environments/environment.prod.ts`
 
-- Cloudflare Pages custom domain, ou `*.is-a.dev` apontando para Pages.
+Valor esperado:
+
+```ts
+apiUrl: 'https://SEU_BACKEND.onrender.com'
+```
+
+Depois, fazer novo deploy no Pages.
+
+Configuração recomendada do Pages:
+
+- Framework preset: `Angular`
+- Root directory: `frontend`
+- Build command: `npm ci && npm run build`
+- Build output directory: `dist/opsdesk/browser`
+- Env var: `NODE_VERSION=20.19.0`
+
+## 5. Checklist final de smoke test
+
+- [ ] Abrir frontend em produção.
+- [ ] Registrar usuário.
+- [ ] Fazer login.
+- [ ] Criar ticket.
+- [ ] Criar asset.
+- [ ] Criar runbook.

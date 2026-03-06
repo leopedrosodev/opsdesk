@@ -88,7 +88,7 @@ export class RegisterComponent {
     this.error = '';
 
     this.authService.register(this.form.getRawValue()).subscribe({
-      next: () => this.router.navigateByUrl('/'),
+      next: () => this.router.navigateByUrl('/dashboard'),
       error: (err) => {
         this.error = err?.error?.message ?? 'Falha ao registrar usuário';
         this.loading = false;
