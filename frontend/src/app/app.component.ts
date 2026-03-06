@@ -11,11 +11,14 @@ import { ThemeService } from './core/services/theme.service';
   template: `
     <header class="topbar">
       <div class="container topbar-content">
-        <a [routerLink]="auth.isAuthenticated() ? '/dashboard' : '/'" class="brand" aria-label="OpsDesk Home">
+        <a routerLink="/" class="brand" aria-label="OpsDesk Home">
           <img [src]="logoPath" alt="OpsDesk" class="brand-logo" />
         </a>
 
         <nav *ngIf="auth.isAuthenticated(); else guestNav" class="nav nav-auth">
+          <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+            Home
+          </a>
           <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
             Dashboard
           </a>

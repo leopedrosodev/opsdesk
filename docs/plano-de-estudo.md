@@ -1,6 +1,6 @@
 # Plano de Estudo - OpsDesk
 
-Plano por sessao (12 sessoes, 1h30 cada), focado no projeto atual.
+Plano por sessao (17 sessoes, 1h30 cada), focado no projeto atual.
 
 ## Sessao 1 - Setup e execucao local
 
@@ -74,6 +74,41 @@ Plano por sessao (12 sessoes, 1h30 cada), focado no projeto atual.
 1. Objetivo: consolidar projeto para apresentacao.
 2. Pratica: revisar README, documentacao e pipeline.
 3. Arquivos: `docs/GUIA-COMPLETO.md`, `backend-ci.yml`, `frontend-ci.yml`.
+
+## Sessao 13 - RxJS essencial no Angular
+
+1. Objetivo: dominar operadores base para transformar e controlar fluxos.
+2. Pratica: exercitar `map`, `filter`, `tap`, `switchMap`, `catchError` e `finalize` em chamadas reais.
+3. Arquivos: `auth.service.ts`, `tickets.service.ts`, `runbooks.service.ts`.
+4. Resultado esperado: voce entende quando encadear operadores e quando evitar subscribe aninhado.
+
+## Sessao 14 - Fluxo HTTP reativo com loading, erro e sucesso
+
+1. Objetivo: padronizar comportamento de tela para requisicoes async.
+2. Pratica: criar estado de `loading/success/error` em pelo menos uma tela de feature.
+3. Arquivos: `tickets-page.component.ts`, `assets-page.component.ts`.
+4. Resultado esperado: UI previsivel, sem "travadas" e com mensagens consistentes.
+
+## Sessao 15 - Lifecycle I (`ngOnInit` e `ngOnChanges`)
+
+1. Objetivo: entender inicializacao e reacao a mudancas de `@Input`.
+2. Pratica: criar um componente filho de filtro/lista para tickets com `@Input()` e `ngOnChanges`.
+3. Arquivos: `tickets-page.component.ts` + novo componente em `shared/`.
+4. Resultado esperado: saber exatamente quando cada hook dispara e por qual motivo.
+
+## Sessao 16 - Lifecycle II (`ngOnDestroy`) e prevencao de memory leak
+
+1. Objetivo: limpar subscriptions e recursos corretamente.
+2. Pratica: implementar teardown com `takeUntilDestroyed` (Angular 17+) ou padrao equivalente.
+3. Arquivos: `home.component.ts`, `dashboard.component.ts` (ou componente com stream manual).
+4. Resultado esperado: componentes sem vazamento e com ciclo de vida controlado.
+
+## Sessao 17 - Refatoracao final de front com ViewModel reativa
+
+1. Objetivo: consolidar RxJS + lifecycle em arquitetura de UI limpa.
+2. Pratica: refatorar uma tela para modelo reativo (estado por stream + efeitos controlados).
+3. Arquivos: `runbooks-page.component.ts` (sugestao) e `core/services/*`.
+4. Resultado esperado: codigo mais testavel, legivel e facil de evoluir.
 
 ## Como usar este plano
 
