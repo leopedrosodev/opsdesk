@@ -4,6 +4,7 @@ import com.opsdesk.application.exceptions.BadRequestException;
 import com.opsdesk.application.exceptions.NotFoundException;
 import com.opsdesk.domain.entities.*;
 import com.opsdesk.domain.repositories.*;
+import com.opsdesk.domain.shared.PageResult;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -52,6 +53,10 @@ public class TicketUseCase {
         return ticketRepository.findAll();
     }
 
+    public PageResult<Ticket> listAll(int page, int size) {
+        return ticketRepository.findAll(page, size);
+    }
+
     public Ticket update(Long id, String title, String description, TicketPriority priority) {
         Ticket ticket = getById(id);
         ticket.updateDetails(title, description, priority);
@@ -82,7 +87,7 @@ public class TicketUseCase {
         return ticketRepository.save(ticket);
     }
 
-    public TicketComment addComment(Long ticketId, Long authorId, String content) {
+    public CommentWithAuthor addComment(Long ticketId, Long authorId, String content) {
         getById(ticketId);
 
         TicketComment comment = new TicketComment(
@@ -93,12 +98,19 @@ public class TicketUseCase {
                 Instant.now()
         );
 
-        return commentRepository.save(comment);
+        TicketComment saved = commentRepository.save(comment);
+        String authorName = userRepository.findById(authorId).map(User::getFullName).orElse("Usuário desconhecido");
+        return new CommentWithAuthor(saved, authorName);
     }
 
-    public List<TicketComment> listComments(Long ticketId) {
+    public List<CommentWithAuthor> listComments(Long ticketId) {
         getById(ticketId);
-        return commentRepository.findByTicketId(ticketId);
+        return commentRepository.findByTicketId(ticketId).stream()
+                .map(c -> {
+                    String name = userRepository.findById(c.getAuthorId()).map(User::getFullName).orElse("Usuário desconhecido");
+                    return new CommentWithAuthor(c, name);
+                })
+                .toList();
     }
 
     public void linkAsset(Long ticketId, Long assetId) {

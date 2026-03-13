@@ -1,12 +1,13 @@
 package com.opsdesk.api.controllers;
 
 import com.opsdesk.api.dto.common.MessageResponse;
+import com.opsdesk.api.dto.common.PagedResponse;
 import com.opsdesk.api.dto.ticket.*;
 import com.opsdesk.api.mappers.TicketMapper;
+import com.opsdesk.application.usecases.CommentWithAuthor;
 import com.opsdesk.application.usecases.CurrentUser;
 import com.opsdesk.application.usecases.TicketUseCase;
 import com.opsdesk.domain.entities.Ticket;
-import com.opsdesk.domain.entities.TicketComment;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,11 +30,14 @@ public class TicketController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN','TECH','USER')")
-    public List<TicketResponse> list() {
-        return ticketUseCase.listAll()
-                .stream()
-                .map(ticket -> TicketMapper.toResponse(ticket, ticketUseCase.listLinkedAssets(ticket.getId())))
-                .toList();
+    public PagedResponse<TicketResponse> list(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size
+    ) {
+        return PagedResponse.from(
+                ticketUseCase.listAll(page, size),
+                ticket -> TicketMapper.toResponse(ticket, ticketUseCase.listLinkedAssets(ticket.getId()))
+        );
     }
 
     @PostMapping
@@ -82,8 +86,8 @@ public class TicketController {
             Authentication authentication
     ) {
         CurrentUser currentUser = currentUserResolver.resolve(authentication);
-        TicketComment comment = ticketUseCase.addComment(id, currentUser.id(), request.content());
-        return TicketMapper.toCommentResponse(comment);
+        CommentWithAuthor result = ticketUseCase.addComment(id, currentUser.id(), request.content());
+        return TicketMapper.toCommentResponse(result.comment(), result.authorName());
     }
 
     @GetMapping("/{id}/comments")
@@ -91,7 +95,7 @@ public class TicketController {
     public List<TicketCommentResponse> listComments(@PathVariable Long id) {
         return ticketUseCase.listComments(id)
                 .stream()
-                .map(TicketMapper::toCommentResponse)
+                .map(r -> TicketMapper.toCommentResponse(r.comment(), r.authorName()))
                 .toList();
     }
 

@@ -27,11 +27,12 @@ public final class TicketMapper {
         );
     }
 
-    public static TicketCommentResponse toCommentResponse(TicketComment comment) {
+    public static TicketCommentResponse toCommentResponse(TicketComment comment, String authorName) {
         return new TicketCommentResponse(
                 comment.getId(),
                 comment.getTicketId(),
                 comment.getAuthorId(),
+                authorName,
                 comment.getContent(),
                 comment.getCreatedAt()
         );

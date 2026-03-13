@@ -3,6 +3,7 @@ package com.opsdesk.application.usecases;
 import com.opsdesk.application.exceptions.NotFoundException;
 import com.opsdesk.domain.entities.Runbook;
 import com.opsdesk.domain.repositories.RunbookRepositoryPort;
+import com.opsdesk.domain.shared.PageResult;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -24,6 +25,10 @@ public class RunbookUseCase {
 
     public List<Runbook> list() {
         return runbookRepository.findAll();
+    }
+
+    public PageResult<Runbook> list(int page, int size) {
+        return runbookRepository.findAll(page, size);
     }
 
     public Runbook getById(Long id) {

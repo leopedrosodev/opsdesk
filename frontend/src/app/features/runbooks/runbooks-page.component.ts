@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Runbook } from '../../core/models/runbook.model';
+import { PageResult } from '../../core/models/ticket.model';
 import { AuthService } from '../../core/services/auth.service';
 import { RunbooksService } from '../../core/services/runbooks.service';
 
@@ -34,7 +35,10 @@ import { RunbooksService } from '../../core/services/runbooks.service';
       </article>
 
       <article class="card" [style.gridColumn]="canCreate() ? 'span 1' : '1 / -1'">
-        <h2>Runbooks</h2>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+          <h2 style="margin:0">Runbooks</h2>
+          <small style="color:var(--text-muted,#888)">{{ page().total }} no total</small>
+        </div>
         <div class="grid">
           <article class="card runbook" *ngFor="let runbook of runbooks()">
             <h3>{{ runbook.title }}</h3>
@@ -42,6 +46,14 @@ import { RunbooksService } from '../../core/services/runbooks.service';
             <pre>{{ runbook.steps }}</pre>
           </article>
         </div>
+
+        @if (page().totalPages > 1) {
+          <div style="display:flex; justify-content:center; align-items:center; gap:0.75rem; margin-top:1rem;">
+            <button class="btn-secondary" [disabled]="currentPage() === 0" (click)="goToPage(currentPage() - 1)">‹ Anterior</button>
+            <span style="font-size:0.875rem">{{ currentPage() + 1 }} / {{ page().totalPages }}</span>
+            <button class="btn-secondary" [disabled]="currentPage() >= page().totalPages - 1" (click)="goToPage(currentPage() + 1)">Próximo ›</button>
+          </div>
+        }
       </article>
     </section>
   `,
@@ -60,6 +72,11 @@ import { RunbooksService } from '../../core/services/runbooks.service';
         padding: 0.75rem;
       }
 
+      .btn-secondary:disabled {
+        opacity: 0.4;
+        cursor: default;
+      }
+
       @media (max-width: 980px) {
         section {
           grid-template-columns: 1fr !important;
@@ -74,6 +91,8 @@ export class RunbooksPageComponent {
   private readonly auth = inject(AuthService);
 
   runbooks = signal<Runbook[]>([]);
+  currentPage = signal(0);
+  page = signal<PageResult<Runbook>>({ content: [], total: 0, page: 0, size: 20, totalPages: 0 });
 
   form = this.fb.nonNullable.group({
     title: ['', [Validators.required]],
@@ -91,7 +110,15 @@ export class RunbooksPageComponent {
   }
 
   load(): void {
-    this.runbooksService.list().subscribe((runbooks) => this.runbooks.set(runbooks));
+    this.runbooksService.list(this.currentPage()).subscribe((result) => {
+      this.page.set(result);
+      this.runbooks.set(result.content);
+    });
+  }
+
+  goToPage(page: number): void {
+    this.currentPage.set(page);
+    this.load();
   }
 
   createRunbook(): void {

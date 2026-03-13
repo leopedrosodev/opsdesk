@@ -110,6 +110,41 @@ Plano por sessao (17 sessoes, 1h30 cada), focado no projeto atual.
 3. Arquivos: `runbooks-page.component.ts` (sugestao) e `core/services/*`.
 4. Resultado esperado: codigo mais testavel, legivel e facil de evoluir.
 
+## Sessao 18 - Paginacao no backend (Spring Data + Clean Architecture)
+
+1. Objetivo: entender como paginacao atravessa as camadas sem vazar Spring no dominio.
+2. Pratica: comparar `PageResult<T>` (dominio) com `Page<T>` do Spring; rastrear o fluxo do `@RequestParam page` ate o `PageRequest.of()` no adapter.
+3. Arquivos: `PageResult.java`, `TicketRepositoryPort.java`, `TicketRepositoryAdapter.java`, `TicketController.java`, `PagedResponse.java`.
+4. Resultado esperado: saber onde cada framework pode entrar e onde o dominio precisa ficar limpo.
+
+## Sessao 19 - Paginacao no frontend (Angular Signals + HTTP params)
+
+1. Objetivo: conectar a paginacao do backend com estado reativo no Angular.
+2. Pratica: estudar como `currentPage` (signal) alimenta o `list(page, size)` e como `goToPage()` atualiza a UI sem reload.
+3. Arquivos: `tickets-page.component.ts`, `assets-page.component.ts`, `tickets.service.ts`, `assets.service.ts`.
+4. Resultado esperado: saber gerenciar estado de pagina com signals e recarregar dados de forma previsivel.
+
+## Sessao 20 - authorName nos comentarios (enriquecimento de dados no use case)
+
+1. Objetivo: entender o padrao de enriquecimento de resposta sem poluir a entidade de dominio.
+2. Pratica: rastrear o fluxo de `addComment` -> `CommentWithAuthor` -> `TicketMapper.toCommentResponse(comment, name)`.
+3. Arquivos: `TicketUseCase.java`, `CommentWithAuthor.java`, `TicketMapper.java`, `TicketCommentResponse.java`.
+4. Resultado esperado: saber quando criar records auxiliares em vez de modificar a entidade de dominio.
+
+## Sessao 21 - Testes unitarios no Angular (HttpClientTestingModule)
+
+1. Objetivo: testar services e guards de forma isolada sem subir o servidor.
+2. Pratica: executar `npm test` e ler cada assertion de `auth.service.spec.ts`, `tickets.service.spec.ts` e `auth.guard.spec.ts`.
+3. Arquivos: `auth.service.spec.ts`, `tickets.service.spec.ts`, `auth.guard.spec.ts`.
+4. Resultado esperado: entender `HttpTestingController`, `expectOne`, `flush` e `TestBed.runInInjectionContext`.
+
+## Sessao 22 - CORS e seguranca em producao
+
+1. Objetivo: entender por que CORS aberto e um problema e como configurar por ambiente.
+2. Pratica: testar o backend localmente com `CORS_ALLOWED_ORIGINS=http://localhost:4200`; tentar uma origem invalida e observar o bloqueio.
+3. Arquivos: `SecurityConfig.java`, `docker-compose.yml`, `.env.example`.
+4. Resultado esperado: saber explicar CORS em entrevista e configurar corretamente por ambiente (local / producao).
+
 ## Como usar este plano
 
 1. Siga uma sessao por dia.

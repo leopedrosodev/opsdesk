@@ -2,8 +2,12 @@ package com.opsdesk.infrastructure.persistence.adapters;
 
 import com.opsdesk.domain.entities.Asset;
 import com.opsdesk.domain.repositories.AssetRepositoryPort;
+import com.opsdesk.domain.shared.PageResult;
 import com.opsdesk.infrastructure.persistence.mappers.AssetPersistenceMapper;
 import com.opsdesk.infrastructure.persistence.repositories.SpringDataAssetRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -31,5 +35,17 @@ public class AssetRepositoryAdapter implements AssetRepositoryPort {
     @Override
     public List<Asset> findAll() {
         return repository.findAll().stream().map(AssetPersistenceMapper::toDomain).toList();
+    }
+
+    @Override
+    public PageResult<Asset> findAll(int page, int size) {
+        PageRequest pageable = PageRequest.of(page, size, Sort.by("name").ascending());
+        Page<Asset> result = repository.findAll(pageable).map(AssetPersistenceMapper::toDomain);
+        return new PageResult<>(result.getContent(), result.getTotalElements(), page, size, result.getTotalPages());
+    }
+
+    @Override
+    public long count() {
+        return repository.count();
     }
 }

@@ -1,5 +1,6 @@
 package com.opsdesk.api.controllers;
 
+import com.opsdesk.api.dto.common.PagedResponse;
 import com.opsdesk.api.dto.runbook.RunbookRequest;
 import com.opsdesk.api.dto.runbook.RunbookResponse;
 import com.opsdesk.api.mappers.RunbookMapper;
@@ -11,8 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/runbooks")
@@ -28,8 +27,11 @@ public class RunbookController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN','TECH','USER')")
-    public List<RunbookResponse> list() {
-        return runbookUseCase.list().stream().map(RunbookMapper::toResponse).toList();
+    public PagedResponse<RunbookResponse> list(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size
+    ) {
+        return PagedResponse.from(runbookUseCase.list(page, size), RunbookMapper::toResponse);
     }
 
     @GetMapping("/{id}")

@@ -2,6 +2,7 @@ package com.opsdesk.api.controllers;
 
 import com.opsdesk.api.dto.asset.AssetRequest;
 import com.opsdesk.api.dto.asset.AssetResponse;
+import com.opsdesk.api.dto.common.PagedResponse;
 import com.opsdesk.api.mappers.AssetMapper;
 import com.opsdesk.application.usecases.AssetUseCase;
 import com.opsdesk.domain.entities.Asset;
@@ -25,8 +26,11 @@ public class AssetController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN','TECH','USER')")
-    public List<AssetResponse> list() {
-        return assetUseCase.list().stream().map(AssetMapper::toResponse).toList();
+    public PagedResponse<AssetResponse> list(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size
+    ) {
+        return PagedResponse.from(assetUseCase.list(page, size), AssetMapper::toResponse);
     }
 
     @PostMapping

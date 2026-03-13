@@ -23,6 +23,7 @@ security:
     secret: ${JWT_SECRET:change-me-change-me-change-me-change-me-1234567890}
     expiration-minutes: ${JWT_EXPIRATION_MINUTES:120}
 
+
 springdoc:
   api-docs:
     path: /api-docs

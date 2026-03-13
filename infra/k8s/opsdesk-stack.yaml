@@ -1,0 +1,138 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: opsdesk
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: opsdesk-secrets
+  namespace: opsdesk
+type: Opaque
+stringData:
+  SPRING_DATASOURCE_URL: jdbc:postgresql://postgres.opsdesk.svc.cluster.local:5432/opsdesk
+  SPRING_DATASOURCE_USERNAME: opsdesk
+  SPRING_DATASOURCE_PASSWORD: opsdesk
+  JWT_SECRET: change-me-change-me-change-me-change-me-1234567890
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opsdesk-backend
+  namespace: opsdesk
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: opsdesk-backend
+  template:
+    metadata:
+      labels:
+        app: opsdesk-backend
+    spec:
+      containers:
+        - name: backend
+          image: ghcr.io/leomotors/opsdesk-backend:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: opsdesk-secrets
+                  key: SPRING_DATASOURCE_URL
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: opsdesk-secrets
+                  key: SPRING_DATASOURCE_USERNAME
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: opsdesk-secrets
+                  key: SPRING_DATASOURCE_PASSWORD
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: opsdesk-secrets
+                  key: JWT_SECRET
+            - name: JWT_EXPIRATION_MINUTES
+              value: "120"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 40
+            periodSeconds: 15
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: opsdesk-backend
+  namespace: opsdesk
+spec:
+  selector:
+    app: opsdesk-backend
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  namespace: opsdesk
+spec:
+  serviceName: postgres
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16-alpine
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: opsdesk
+            - name: POSTGRES_USER
+              value: opsdesk
+            - name: POSTGRES_PASSWORD
+              value: opsdesk
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 5Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: opsdesk
+spec:
+  selector:
+    app: postgres
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: 5432

@@ -1,6 +1,6 @@
 # Plano de Implementacao - OpsDesk
 
-Ultima atualizacao: 2026-03-04
+Ultima atualizacao: 2026-03-12
 
 ## 1. Objetivo deste documento
 
@@ -77,12 +77,20 @@ Consolidar o estado atual do projeto e definir o plano pratico para colocar o MV
 
 ### P1 - Qualidade e seguranca minima para portfolio
 
-- [ ] Implementar testes unitarios de use case:
-  - [ ] `AuthUseCase` (email duplicado, senha invalida, login invalido)
-  - [ ] `TicketUseCase` (regras de status e assignee)
+- [x] Implementar testes unitarios de use case:
+  - [x] `AuthUseCase` (email duplicado, senha invalida, login invalido)
+  - [x] `TicketUseCase` (regras de status e assignee)
+- [x] Restringir CORS por ambiente via `CORS_ALLOWED_ORIGINS` (env var).
 - [ ] Ajustar regra de cadastro publico para sempre criar `USER` (hardening de role no register).
-- [ ] Restringir CORS por ambiente (em vez de origem aberta para `*`).
 - [ ] Revisar mensagens de erro da API para manter padrao consistente.
+
+### P1.5 - Melhorias de qualidade implementadas (2026-03-12)
+
+- [x] Paginacao em `GET /tickets`, `GET /assets`, `GET /runbooks` (page + size + totalPages).
+- [x] `authorName` nos comentarios de ticket (sem expor apenas o ID).
+- [x] Testes unitarios no Angular: `auth.service.spec.ts`, `tickets.service.spec.ts`, `auth.guard.spec.ts`.
+- [x] `PageResult<T>` no dominio e `PagedResponse<T>` na API (clean architecture preservada).
+- [x] `PageResult<T>` e paginacao reativa com signals no frontend.
 
 ### P2 - Entrega profissional (portfolio)
 

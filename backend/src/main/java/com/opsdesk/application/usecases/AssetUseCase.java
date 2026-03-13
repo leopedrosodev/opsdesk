@@ -3,6 +3,7 @@ package com.opsdesk.application.usecases;
 import com.opsdesk.application.exceptions.NotFoundException;
 import com.opsdesk.domain.entities.Asset;
 import com.opsdesk.domain.repositories.AssetRepositoryPort;
+import com.opsdesk.domain.shared.PageResult;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +25,10 @@ public class AssetUseCase {
 
     public List<Asset> list() {
         return assetRepository.findAll();
+    }
+
+    public PageResult<Asset> list(int page, int size) {
+        return assetRepository.findAll(page, size);
     }
 
     public Asset update(Long id, String name, String type, Long ownerId, String ip, String location, Set<String> tags) {
