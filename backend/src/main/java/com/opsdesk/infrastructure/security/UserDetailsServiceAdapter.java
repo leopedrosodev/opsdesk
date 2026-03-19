@@ -25,6 +25,6 @@ public class UserDetailsServiceAdapter implements UserDetailsService {
                         user.getPasswordHash(),
                         user.getRole()
                 ))
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario nao encontrado"));
     }
 }

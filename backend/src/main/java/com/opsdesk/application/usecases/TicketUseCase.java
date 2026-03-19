@@ -67,7 +67,7 @@ public class TicketUseCase {
         Ticket ticket = getById(id);
 
         if (status == TicketStatus.IN_PROGRESS && ticket.getAssigneeId() == null) {
-            throw new BadRequestException("Ticket must be assigned before moving to IN_PROGRESS");
+            throw new BadRequestException("O ticket precisa estar atribuido antes de ir para IN_PROGRESS");
         }
 
         ticket.updateStatus(status);
@@ -77,10 +77,10 @@ public class TicketUseCase {
     public Ticket assign(Long ticketId, Long assigneeId) {
         Ticket ticket = getById(ticketId);
         User assignee = userRepository.findById(assigneeId)
-                .orElseThrow(() -> new NotFoundException("Assignee not found"));
+                .orElseThrow(() -> new NotFoundException("Responsavel nao encontrado"));
 
         if (assignee.getRole() != Role.TECH && assignee.getRole() != Role.ADMIN) {
-            throw new BadRequestException("Assignee must be TECH or ADMIN");
+            throw new BadRequestException("O responsavel precisa ter perfil TECH ou ADMIN");
         }
 
         ticket.assignTo(assigneeId);
@@ -115,7 +115,7 @@ public class TicketUseCase {
 
     public void linkAsset(Long ticketId, Long assetId) {
         getById(ticketId);
-        assetRepository.findById(assetId).orElseThrow(() -> new NotFoundException("Asset not found"));
+        assetRepository.findById(assetId).orElseThrow(() -> new NotFoundException("Ativo nao encontrado"));
         ticketAssetRepository.link(ticketId, assetId);
     }
 
@@ -126,6 +126,6 @@ public class TicketUseCase {
 
     private Ticket getById(Long id) {
         return ticketRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Ticket not found"));
+                .orElseThrow(() -> new NotFoundException("Ticket nao encontrado"));
     }
 }

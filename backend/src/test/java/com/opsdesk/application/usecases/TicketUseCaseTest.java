@@ -156,11 +156,12 @@ class TicketUseCaseTest {
 
         when(ticketRepository.findById(1L)).thenReturn(Optional.of(ticketSemAssignee));
         when(commentRepository.save(any(TicketComment.class))).thenReturn(comment);
+        when(userRepository.findById(10L)).thenReturn(Optional.empty());
 
-        TicketComment result = ticketUseCase.addComment(1L, 10L, "Comentário");
+        CommentWithAuthor result = ticketUseCase.addComment(1L, 10L, "Comentário");
 
-        assertThat(result.getContent()).isEqualTo("Comentário");
-        assertThat(result.getAuthorId()).isEqualTo(10L);
+        assertThat(result.comment().getContent()).isEqualTo("Comentário");
+        assertThat(result.comment().getAuthorId()).isEqualTo(10L);
     }
 
     @Test
@@ -180,8 +181,9 @@ class TicketUseCaseTest {
 
         when(ticketRepository.findById(1L)).thenReturn(Optional.of(ticketSemAssignee));
         when(commentRepository.findByTicketId(1L)).thenReturn(List.of(c1, c2));
+        when(userRepository.findById(10L)).thenReturn(Optional.empty());
 
-        List<TicketComment> result = ticketUseCase.listComments(1L);
+        List<CommentWithAuthor> result = ticketUseCase.listComments(1L);
 
         assertThat(result).hasSize(2);
     }

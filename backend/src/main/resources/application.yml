@@ -29,3 +29,6 @@ springdoc:
     path: /api-docs
   swagger-ui:
     path: /swagger-ui.html
+
+
+##a92ea0bd2ae2fd3fe9c455d882205332jwt

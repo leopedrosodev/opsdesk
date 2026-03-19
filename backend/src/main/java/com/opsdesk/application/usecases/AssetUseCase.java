@@ -33,7 +33,7 @@ public class AssetUseCase {
 
     public Asset update(Long id, String name, String type, Long ownerId, String ip, String location, Set<String> tags) {
         Asset asset = assetRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Asset not found"));
+                .orElseThrow(() -> new NotFoundException("Ativo nao encontrado"));
 
         asset.update(name, type, ownerId, ip, location, tags);
         return assetRepository.save(asset);

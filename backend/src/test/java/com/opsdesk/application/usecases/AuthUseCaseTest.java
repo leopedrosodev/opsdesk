@@ -49,11 +49,11 @@ class AuthUseCaseTest {
     @Test
     void register_deveRetornarAuthResult_quandoDadosValidos() {
         when(userRepository.existsByEmail("joao@example.com")).thenReturn(false);
-        when(passwordHasher.hash("senha123")).thenReturn("hashed123");
+        when(passwordHasher.hash("Senha@123")).thenReturn("hashed123");
         when(userRepository.save(any(User.class))).thenReturn(savedUser);
         when(tokenProvider.generate(savedUser)).thenReturn("jwt-token");
 
-        AuthResult result = authUseCase.register("João Silva", "joao@example.com", "senha123", Role.USER);
+        AuthResult result = authUseCase.register("João Silva", "joao@example.com", "Senha@123", "Senha@123", Role.USER);
 
         assertThat(result.token()).isEqualTo("jwt-token");
         assertThat(result.email()).isEqualTo("joao@example.com");
@@ -64,9 +64,9 @@ class AuthUseCaseTest {
     void register_deveLancarBadRequest_quandoEmailJaExiste() {
         when(userRepository.existsByEmail("joao@example.com")).thenReturn(true);
 
-        assertThatThrownBy(() -> authUseCase.register("João", "joao@example.com", "senha", Role.USER))
+        assertThatThrownBy(() -> authUseCase.register("João", "joao@example.com", "Senha@123", "Senha@123", Role.USER))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("Email already in use");
+                .hasMessage("Este email ja esta em uso");
     }
 
     @Test
@@ -78,7 +78,7 @@ class AuthUseCaseTest {
         when(userRepository.save(any(User.class))).thenReturn(userSemRole);
         when(tokenProvider.generate(any())).thenReturn("token");
 
-        AuthResult result = authUseCase.register("Maria", "maria@example.com", "senha", null);
+        AuthResult result = authUseCase.register("Maria", "maria@example.com", "Senha@123", "Senha@123", null);
 
         assertThat(result.role()).isEqualTo(Role.USER);
     }
@@ -103,7 +103,7 @@ class AuthUseCaseTest {
 
         assertThatThrownBy(() -> authUseCase.login("naoexiste@example.com", "qualquer"))
                 .isInstanceOf(UnauthorizedException.class)
-                .hasMessage("Invalid credentials");
+                .hasMessage("Credenciais invalidas");
     }
 
     @Test
@@ -113,6 +113,6 @@ class AuthUseCaseTest {
 
         assertThatThrownBy(() -> authUseCase.login("joao@example.com", "senhaErrada"))
                 .isInstanceOf(UnauthorizedException.class)
-                .hasMessage("Invalid credentials");
+                .hasMessage("Credenciais invalidas");
     }
 }

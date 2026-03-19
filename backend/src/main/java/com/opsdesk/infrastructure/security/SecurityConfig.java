@@ -44,9 +44,9 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint((request, response, authException) ->
-                                response.sendError(401, "Unauthorized"))
+                                response.sendError(401, "Nao autorizado"))
                         .accessDeniedHandler((request, response, accessDeniedException) ->
-                                response.sendError(403, "Forbidden"))
+                                response.sendError(403, "Acesso negado"))
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(

@@ -33,6 +33,6 @@ public class RunbookUseCase {
 
     public Runbook getById(Long id) {
         return runbookRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Runbook not found"));
+                .orElseThrow(() -> new NotFoundException("Runbook nao encontrado"));
     }
 }

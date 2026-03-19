@@ -67,19 +67,32 @@ O repositório também foi ajustado para servir como laboratório de entrevista:
 **Pré-requisitos:** Java 17+, Node.js 20+, Docker
 
 ```bash
-# 1. Subir banco + backend
-cd infra
-docker compose up --build
+# 1. Subir o banco
+./scripts/db.sh up
+
+# 2. Subir o backend
+cd backend
+mvn spring-boot:run
 
 # API em http://localhost:8080
 # Swagger em http://localhost:8080/swagger-ui.html
 
-# 2. Subir frontend
+# 3. Subir o frontend
 cd frontend
 npm install
 npm start
 
 # Frontend em http://localhost:4200
+```
+
+### Comandos do banco
+
+```bash
+./scripts/db.sh up       # sobe o PostgreSQL via Docker
+./scripts/db.sh down     # para e remove o container
+./scripts/db.sh restart  # reinicia o container
+./scripts/db.sh status   # verifica se o banco está pronto
+./scripts/db.sh logs     # exibe os logs do container
 ```
 
 ## Variáveis de ambiente (backend)
