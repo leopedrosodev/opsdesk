@@ -15,3 +15,7 @@ frontend/.angular/
 .idea/
 *.iml
 .claude/
+
+# os
+.DS_Store
+Thumbs.db
