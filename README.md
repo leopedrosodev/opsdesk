@@ -55,13 +55,6 @@ mvn test -Dtest="AuthUseCaseTest,TicketUseCaseTest,AssetUseCaseTest"
 
 Cenários cobertos: happy path, entidade não encontrada, validações de negócio (ex: ticket sem assignee não pode ir para IN_PROGRESS, apenas TECH/ADMIN pode ser assignee).
 
-## Treino para vaga pleno
-
-O repositório também foi ajustado para servir como laboratório de entrevista:
-
-- Dashboard fullstack com endpoint agregado em `/dashboard/summary`
-- Plano objetivo de evolução em `docs/preparo-vaga-dev-pleno.md`
-
 ## Como rodar local
 
 **Pré-requisitos:** Java 17+, Node.js 20+, Docker
