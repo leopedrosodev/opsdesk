@@ -1,12 +1,12 @@
 # OpsDesk - Deploy de Produção (Cloudflare + Render + Neon)
 
-Última atualização: 2026-03-05
+Última atualização: 2026-05-15
 
 ## 1. Estado atual
 
 - Frontend já publicado no Cloudflare Pages.
-- Backend pronto para deploy no Render.
-- Banco Neon ainda precisa ser conectado ao Render.
+- Backend publicado no Render.
+- Banco Neon conectado ao Render via variáveis de ambiente.
 
 ## 2. Banco (Neon)
 
@@ -36,8 +36,9 @@ Você pode usar `infra/render.yaml` (Blueprint) ou configurar manualmente.
    - `SPRING_DATASOURCE_URL`
    - `SPRING_DATASOURCE_USERNAME`
    - `SPRING_DATASOURCE_PASSWORD`
-   - `JWT_SECRET`
+   - `JWT_SECRET` com valor forte, sem usar o valor de exemplo
    - `JWT_EXPIRATION_MINUTES=120`
+   - `CORS_ALLOWED_ORIGINS=https://opsdesk-6y3.pages.dev`
 6. Deploy.
 
 ### 3.2 Validação após deploy
@@ -45,6 +46,7 @@ Você pode usar `infra/render.yaml` (Blueprint) ou configurar manualmente.
 1. `GET https://SEU_BACKEND.onrender.com/health`
 2. `GET https://SEU_BACKEND.onrender.com/swagger-ui.html`
 3. Testar `POST /auth/register` e `POST /auth/login`.
+4. Confirmar que o cadastro público retorna usuário com perfil `USER`.
 
 ## 4. Frontend (Cloudflare Pages)
 
@@ -76,3 +78,7 @@ Configuração recomendada do Pages:
 - [ ] Criar ticket.
 - [ ] Criar asset.
 - [ ] Criar runbook.
+
+## 6. Segurança de cadastro
+
+O endpoint público `POST /auth/register` não aceita escolha de perfil. Todo cadastro público nasce como `USER`; perfis `TECH` e `ADMIN` devem ser criados por fluxo administrativo ou seed controlado.

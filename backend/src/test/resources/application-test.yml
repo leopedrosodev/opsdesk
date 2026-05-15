@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:opsdesk;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+
+security:
+  jwt:
+    secret: test-secret-test-secret-test-secret-test-secret
+    expiration-minutes: 120
+  cors:
+    allowed-origins: http://localhost:4200

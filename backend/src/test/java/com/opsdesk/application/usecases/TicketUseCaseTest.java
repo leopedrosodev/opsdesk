@@ -79,7 +79,7 @@ class TicketUseCaseTest {
 
         assertThatThrownBy(() -> ticketUseCase.update(99L, "x", "y", TicketPriority.LOW))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessage("Ticket not found");
+                .hasMessage("Ticket nao encontrado");
     }
 
     // --- updateStatus ---
@@ -100,7 +100,7 @@ class TicketUseCaseTest {
 
         assertThatThrownBy(() -> ticketUseCase.updateStatus(1L, TicketStatus.IN_PROGRESS))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("Ticket must be assigned before moving to IN_PROGRESS");
+                .hasMessage("O ticket precisa estar atribuido antes de ir para IN_PROGRESS");
     }
 
     @Test
@@ -135,7 +135,7 @@ class TicketUseCaseTest {
 
         assertThatThrownBy(() -> ticketUseCase.assign(1L, 7L))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("Assignee must be TECH or ADMIN");
+                .hasMessage("O responsavel precisa ter perfil TECH ou ADMIN");
     }
 
     @Test
@@ -145,7 +145,7 @@ class TicketUseCaseTest {
 
         assertThatThrownBy(() -> ticketUseCase.assign(1L, 99L))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessage("Assignee not found");
+                .hasMessage("Responsavel nao encontrado");
     }
 
     // --- addComment ---
@@ -225,6 +225,6 @@ class TicketUseCaseTest {
 
         assertThatThrownBy(() -> ticketUseCase.linkAsset(1L, 99L))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessage("Asset not found");
+                .hasMessage("Ativo nao encontrado");
     }
 }

@@ -4,13 +4,14 @@ Sistema de Service Desk para gerenciamento de chamados, ativos e runbooks de TI.
 
 > **Autor:** Leonardo Pedroso
 
-> **Demo ao vivo:** [opsdesk-6y3.pages.dev](https://opsdesk-6y3.pages.dev/) &nbsp;|&nbsp; **API:** [opsdesk-qam9.onrender.com](https://opsdesk-qam9.onrender.com/swagger-ui.html)
+> **Demo ao vivo:** [opsdesk-6y3.pages.dev](https://opsdesk-6y3.pages.dev/) &nbsp;|&nbsp; **API:** [opsdesk-api.onrender.com](https://opsdesk-api.onrender.com/swagger-ui.html)
 
 ---
 
 ## Funcionalidades
 
 - Autenticação com JWT e controle de acesso por perfil (ADMIN, TECH, USER)
+- Cadastro público sempre cria usuários USER, evitando escalada de privilégio por payload
 - Criação e gerenciamento de chamados com prioridade e status
 - Atribuição de chamados a técnicos
 - Comentários em chamados
@@ -59,12 +60,34 @@ Cenários cobertos: happy path, entidade não encontrada, validações de negóc
 
 **Pré-requisitos:** Java 17+, Node.js 20+, Docker
 
+### Modo rápido
+
+```bash
+cp .env.local.example .env.local
+./scripts/dev.sh
+```
+
+O script sobe PostgreSQL, backend e frontend. Acesse:
+
+- Frontend: `http://localhost:4200`
+- API: `http://localhost:8080`
+- Swagger: `http://localhost:8080/swagger-ui.html`
+
+Para parar backend e frontend, use `Ctrl+C`. Para parar o banco:
+
+```bash
+./scripts/dev.sh down
+```
+
+### Modo manual
+
 ```bash
 # 1. Subir o banco
 ./scripts/db.sh up
 
 # 2. Subir o backend
 cd backend
+set -a && source ../.env.local && set +a
 mvn spring-boot:run
 
 # API em http://localhost:8080
@@ -72,7 +95,7 @@ mvn spring-boot:run
 
 # 3. Subir o frontend
 cd frontend
-npm install
+npm ci
 npm start
 
 # Frontend em http://localhost:4200
@@ -92,11 +115,13 @@ npm start
 
 Veja `backend/.env.example`.
 
+Em produção, configure `JWT_SECRET` com um valor forte e `CORS_ALLOWED_ORIGINS` com o domínio do frontend publicado.
+
 ## Endpoints principais
 
 | Método | Rota | Descrição |
 |---|---|---|
-| POST | `/auth/register` | Cadastro de usuário |
+| POST | `/auth/register` | Cadastro público de usuário USER |
 | POST | `/auth/login` | Login e geração de JWT |
 | GET/POST | `/tickets` | Listar e criar chamados |
 | PUT | `/tickets/{id}` | Atualizar chamado |
@@ -106,4 +131,4 @@ Veja `backend/.env.example`.
 | GET/POST | `/assets` | Listar e criar ativos |
 | GET/POST | `/runbooks` | Listar e criar runbooks |
 
-Documentação interativa completa: [swagger-ui.html](https://opsdesk-qam9.onrender.com/swagger-ui.html)
+Documentação interativa completa: [swagger-ui.html](https://opsdesk-api.onrender.com/swagger-ui.html)

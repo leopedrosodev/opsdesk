@@ -10,7 +10,6 @@ import {
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
-import { UserRole } from '../../core/models/auth.model';
 
 @Component({
   standalone: true,
@@ -73,14 +72,6 @@ import { UserRole } from '../../core/models/auth.model';
         <p *ngIf="hasFieldError('confirmPassword')" class="error">{{ getFieldError('confirmPassword') }}</p>
 
         <p *ngIf="showPasswordMismatch" class="error">As senhas não coincidem.</p>
-
-        <label>
-          Perfil
-          <select formControlName="role" [class.invalid]="hasFieldError('role')">
-            <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
-          </select>
-        </label>
-        <p *ngIf="hasFieldError('role')" class="error">{{ getFieldError('role') }}</p>
 
         <p *ngIf="error" class="error">{{ error }}</p>
 
@@ -210,15 +201,12 @@ export class RegisterComponent {
   loading = false;
   error = '';
 
-  roles: UserRole[] = ['USER', 'TECH', 'ADMIN'];
-
   form = this.fb.nonNullable.group(
     {
       fullName: ['', [Validators.required, Validators.maxLength(120)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],
-      confirmPassword: ['', [Validators.required]],
-      role: 'USER' as UserRole
+      confirmPassword: ['', [Validators.required]]
     },
     { validators: passwordMatchValidator('password', 'confirmPassword') }
   );
@@ -301,14 +289,13 @@ type PasswordRules = {
   hasSpecialChar: boolean;
 };
 
-type RegisterFieldName = 'fullName' | 'email' | 'password' | 'confirmPassword' | 'role';
+type RegisterFieldName = 'fullName' | 'email' | 'password' | 'confirmPassword';
 
 const FIELD_LABELS: Record<RegisterFieldName, string> = {
   fullName: 'Nome completo',
   email: 'Email',
   password: 'Senha',
-  confirmPassword: 'Confirmacao de senha',
-  role: 'Perfil'
+  confirmPassword: 'Confirmacao de senha'
 };
 
 function passwordMatchValidator(passwordField: string, confirmPasswordField: string): ValidatorFn {

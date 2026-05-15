@@ -33,8 +33,7 @@ public class AuthUseCase {
             String fullName,
             String email,
             String rawPassword,
-            String confirmPassword,
-            Role requestedRole
+            String confirmPassword
     ) {
         validatePasswordRules(rawPassword, confirmPassword);
 
@@ -42,14 +41,12 @@ public class AuthUseCase {
             throw new BadRequestException("Este email ja esta em uso");
         }
 
-        Role role = requestedRole == null ? Role.USER : requestedRole;
-
         User user = new User(
                 null,
                 fullName,
                 email,
                 passwordHasher.hash(rawPassword),
-                role,
+                Role.USER,
                 Instant.now()
         );
 

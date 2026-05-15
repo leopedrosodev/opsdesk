@@ -82,17 +82,31 @@ import { ThemeService } from './core/services/theme.service';
       .nav {
         display: flex;
         align-items: center;
-        gap: 0.85rem;
+        gap: 0.35rem;
+        border: 1px solid var(--border);
+        background: color-mix(in srgb, var(--surface-soft) 70%, transparent);
+        border-radius: 999px;
+        padding: 0.28rem;
       }
 
       .nav a {
         text-decoration: none;
         color: var(--muted);
         font-weight: 500;
+        border-radius: 999px;
+        padding: 0.42rem 0.68rem;
+        transition: background 0.18s ease, color 0.18s ease;
       }
 
       .nav a.active {
-        color: var(--primary);
+        color: var(--text);
+        background: var(--surface);
+        box-shadow: var(--shadow-soft);
+      }
+
+      .nav a:hover {
+        color: var(--text);
+        background: var(--surface-hover);
       }
 
       .nav-guest .cta-link {
@@ -137,7 +151,7 @@ import { ThemeService } from './core/services/theme.service';
           width: 100%;
           justify-content: flex-start;
           padding-top: 0.35rem;
-          border-top: 1px solid var(--border);
+          overflow-x: auto;
         }
       }
 

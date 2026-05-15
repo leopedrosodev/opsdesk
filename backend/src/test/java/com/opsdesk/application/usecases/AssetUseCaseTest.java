@@ -84,6 +84,6 @@ class AssetUseCaseTest {
 
         assertThatThrownBy(() -> assetUseCase.update(99L, "x", "y", 1L, null, null, null))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessage("Asset not found");
+                .hasMessage("Ativo nao encontrado");
     }
 }

@@ -27,8 +27,7 @@ public class AuthController {
                 request.fullName(),
                 request.email(),
                 request.password(),
-                request.confirmPassword(),
-                request.role()
+                request.confirmPassword()
         );
 
         return AuthMapper.toResponse(result);

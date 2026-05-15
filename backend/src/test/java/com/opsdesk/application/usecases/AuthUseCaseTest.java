@@ -53,7 +53,7 @@ class AuthUseCaseTest {
         when(userRepository.save(any(User.class))).thenReturn(savedUser);
         when(tokenProvider.generate(savedUser)).thenReturn("jwt-token");
 
-        AuthResult result = authUseCase.register("João Silva", "joao@example.com", "Senha@123", "Senha@123", Role.USER);
+        AuthResult result = authUseCase.register("João Silva", "joao@example.com", "Senha@123", "Senha@123");
 
         assertThat(result.token()).isEqualTo("jwt-token");
         assertThat(result.email()).isEqualTo("joao@example.com");
@@ -64,13 +64,13 @@ class AuthUseCaseTest {
     void register_deveLancarBadRequest_quandoEmailJaExiste() {
         when(userRepository.existsByEmail("joao@example.com")).thenReturn(true);
 
-        assertThatThrownBy(() -> authUseCase.register("João", "joao@example.com", "Senha@123", "Senha@123", Role.USER))
+        assertThatThrownBy(() -> authUseCase.register("João", "joao@example.com", "Senha@123", "Senha@123"))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage("Este email ja esta em uso");
     }
 
     @Test
-    void register_deveAtribuirRoleUser_quandoRoleForNula() {
+    void register_deveAtribuirRoleUser_paraCadastroPublico() {
         User userSemRole = new User(2L, "Maria", "maria@example.com", "hash", Role.USER, Instant.now());
 
         when(userRepository.existsByEmail("maria@example.com")).thenReturn(false);
@@ -78,7 +78,7 @@ class AuthUseCaseTest {
         when(userRepository.save(any(User.class))).thenReturn(userSemRole);
         when(tokenProvider.generate(any())).thenReturn("token");
 
-        AuthResult result = authUseCase.register("Maria", "maria@example.com", "Senha@123", "Senha@123", null);
+        AuthResult result = authUseCase.register("Maria", "maria@example.com", "Senha@123", "Senha@123");
 
         assertThat(result.role()).isEqualTo(Role.USER);
     }
